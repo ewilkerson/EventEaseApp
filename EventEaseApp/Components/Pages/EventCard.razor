@@ -1,26 +1,31 @@
 ﻿@using EventEaseApp.Models
-@using Microsoft.AspNetCore.Components
+@using EventEaseApp.Services
 
-<div class="card mb-3">
+<div class="card shadow-sm mb-3">
     <div class="card-body">
-        <h5 class="card-title"> Event Id - @Event.Id
-            <hr> @Event.Name
-        </h5>
+        <h5 class="card-title">@Event.Name</h5>
         <p class="card-text"><strong>Date:</strong> @Event.Date</p>
-        <p class="card-text"><strong>Location:</strong> @Event.Location</p>
-        <button class="btn btn-primary" @onclick="NavigateToDetails">View Details</button>
+        <p class="card-text">@Event.Description</p>
+
+        <!-- Two-Way Data Binding Example -->
+        <div class="form-group mb-3">
+            <label for="partySize">Expected Party Size:</label>
+            <input type="number" id="partySize" class="form-control" @bind="PartySize" @bind:event="oninput" />
+            <small class="text-muted">You are bringing @PartySize people.</small>
+        </div>
+
+        <button class="btn btn-primary" @onclick="GoToDetails">View Details</button>
     </div>
 </div>
 
 @code {
-    [Parameter]
-    public Event Event { get; set; }
+    [Parameter] public Event Event { get; set; }
+    [Inject] public NavigationManager NavManager { get; set; }
 
-    [Parameter]
-    public EventCallback<int> OnViewDetails { get; set; }
+    public int PartySize { get; set; } = 1;
 
-    private void NavigateToDetails()
+    private void GoToDetails()
     {
-        OnViewDetails.InvokeAsync(Event.Id);
+        NavManager.NavigateTo($"/events/{Event.Id}");
     }
 }

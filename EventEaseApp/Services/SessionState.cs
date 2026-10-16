@@ -1,27 +1,26 @@
-﻿namespace EventEaseApp.Services
+﻿using EventEaseApp.Models;
+
+namespace EventEaseApp.Services
 {
     public class SessionState
     {
         public string UserName { get; set; } = string.Empty;
         public string UserEmail { get; set; } = string.Empty;
-        public Dictionary<int, List<string>> EventAttendees { get; private set; } = new Dictionary<int, List<string>>();
 
-        public void RegisterForEvent(int eventId, string attendee)
+        public List<Registration> Attendees { get; private set; } = new();
+        public event Action OnStateChange;
+
+        public void RegisterAttendee(Registration attendee)
         {
-            if (!EventAttendees.ContainsKey(eventId))
-            {
-                EventAttendees[eventId] = new List<string>();
-            }
-
-            if (!EventAttendees[eventId].Contains(attendee))
-            {
-                EventAttendees[eventId].Add(attendee); // Add attendee to the event
-            }
+            Attendees.Add(attendee);
+            NotifyStateChanged();
         }
 
-        public List<string> GetAttendeesForEvent(int eventId)
+        private void NotifyStateChanged() => OnStateChange?.Invoke();
+
+        public List<Registration> GetAttendeesForEvent(int eventId)
         {
-            return EventAttendees.ContainsKey(eventId) ? EventAttendees[eventId] : new List<string>();
+            return Attendees.Where(a => a.EventId == eventId).ToList();
         }
 
     }

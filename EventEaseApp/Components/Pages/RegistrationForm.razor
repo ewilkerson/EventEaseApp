@@ -1,6 +1,7 @@
 ﻿@using EventEaseApp.Models
 @using EventEaseApp.Services
-@inject AttendanceStateService AttendanceService
+@inject SessionState SessionState
+@inject NavigationManager Navigation
 
 <EditForm Model="@registration" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -8,12 +9,21 @@
 
     <div class="mb-3">
         <label>Name:</label>
-        <InputText @bind-Value="registration.Name" class="form-control" />
+        <InputText @bind-Value="registration.Name" class="form-control" @bind-Value="Registration.Name" />
+        <ValidationMessage For="@(() => registration.Name)" />
     </div>
     <div class="mb-3">
         <label>Email:</label>
-        <InputText @bind-Value="registration.Email" class="form-control" />
+        <InputText @bind-Value="registration.Email" class="form-control" @bind-Value="Registration.Email" />
+        <ValidationMessage For="@(() => registration.Email)" />
     </div>
+
+      <div class="mb-3">
+            <label for="eventId" class="form-label">Event ID</label>
+            <InputNumber id="eventId" class="form-control" @bind-Value="registration.EventId"  />
+            <ValidationMessage For="@(() => registration.EventId)" />
+        </div>
+
 
     <button type="submit" class="btn btn-success">Register for Event</button>
 </EditForm>
@@ -35,7 +45,13 @@
 
     private void HandleValidSubmit()
     {
-        AttendanceService.RegisterAttendee(registration);
+                // Register attendee in SessionState
+        SessionState.RegisterAttendee(registration);
+
+        Console.WriteLine($"User registered: Name = {registration.Name}, Email = {registration.Email}, Event ID = {registration.EventId}");
+        Navigation.NavigateTo($"/event/{registration.EventId}"); // Redirect to the event details page
+
+        SessionState.RegisterAttendee(registration);
         isRegistered = true;
         registration = new Registration { EventId = this.EventId }; // Reset form
     }

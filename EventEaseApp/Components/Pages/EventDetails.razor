@@ -1,16 +1,23 @@
-﻿@page "/event/{Id:int}"
+﻿@page "/events/{EventId:int}"
 @using EventEaseApp.Models
 @using EventEaseApp.Services
 @inject EventService EventService
 @inject SessionState SessionState
 @inject NavigationManager Navigation
 
-    @if (SelectedEvent != null)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h1>@SelectedEvent.Name</h1>
-                <p><strong>Date:</strong> @SelectedEvent.Date</p>
+
+<h3>Event Details</h3>
+
+@if (SelectedEvent == null)
+{
+    <p><em>Loading event or event not found...</em></p>
+}
+else
+{
+    <div class="card">
+    <RegistrationForm EventId="@SelectedEvent.Id" />
+    <h4>@SelectedEvent.Name</h4>
+                    <p><strong>Date:</strong> @SelectedEvent.Date</p>
                 <p><strong>Location:</strong> @SelectedEvent.Location</p>
                 <p>@SelectedEvent.Description</p>
 
@@ -20,7 +27,7 @@
                     <ul>
                         @foreach (var attendee in Attendees)
                         {
-                            <li>@attendee</li>
+                            <li>@attendee.Name (@attendee.Email)</li>
                         }
                     </ul>
                 }
@@ -28,34 +35,32 @@
                 {
                     <p>No attendees registered yet.</p>
                 }
-
-                <button class="btn btn-secondary mt-3" @onclick="NavigateBack">Back to Events</button>
-            </div>
-        </div>
-    }
-    else
-    {
-        <p>Loading event details...</p>
-    }
+        <button class="btn btn-secondary mt-3" @onclick="NavigateBack">Back to Events</button>
+</div>
+}
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+    [Parameter] 
+    public int EventId { get; set; }
+    private Event SelectedEvent;
+    private List<Registration> Attendees = new List<Registration>();
 
-    private Event ?SelectedEvent;
-    private List<string> Attendees = new List<string>();
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        // Fetch event details from EventService
-        SelectedEvent = await EventService.GetEventByIdAsync(Id);
+        // Fetch event by the routed ID
+        SelectedEvent = EventService.GetEventByIdAsync(EventId).Result;
+
+                // Fetch event details from EventService
+       // SelectedEvent = await EventService.GetEventByIdAsync(Id);
 
         // Get attendees from SessionState
-        Attendees = SessionState.GetAttendeesForEvent(Id);
+        Attendees = SessionState.GetAttendeesForEvent(EventId);
+
     }
 
     private void NavigateBack()
     {
         Navigation.NavigateTo("/events");
     }
+
 }
