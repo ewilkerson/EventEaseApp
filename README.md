@@ -27,7 +27,7 @@ Experience EventEase in action: [View Live Demo](https://proud-mud-095041a00.6.a
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/waleed-ali-sarwar/EventEaseApp.git
+   git clone https://github.com/ewilkerson/EventEaseApp.git
    ```
 
 ## Deployment
