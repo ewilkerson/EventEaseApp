@@ -7,20 +7,26 @@ namespace EventEaseApp.Services
         public string UserName { get; set; } = string.Empty;
         public string UserEmail { get; set; } = string.Empty;
 
-        public List<Registration> Attendees { get; private set; } = new();
+        public List<Attendee> Attendees { get; private set; } = new();
         public event Action OnStateChange;
 
         public void RegisterAttendee(Registration attendee)
         {
-            Attendees.Add(attendee);
+            Attendee newAttendee = new Attendee
+            {
+                Name = attendee.Name,
+                Email = attendee.Email,
+                Id = attendee.EventId
+            };
+            Attendees.Add(newAttendee);
             NotifyStateChanged();
         }
 
         private void NotifyStateChanged() => OnStateChange?.Invoke();
 
-        public List<Registration> GetAttendeesForEvent(int eventId)
+        public List<Attendee> GetAttendeesForEvent(int eventId)
         {
-            return Attendees.Where(a => a.EventId == eventId).ToList();
+            return Attendees.Where(a => a.Id == eventId).ToList();
         }
 
     }

@@ -50,7 +50,7 @@ namespace EventEaseApp.Services
         }
 
         // Add an attendee to an event
-        public async Task AddAttendeeAsync(int eventId, string attendee)
+        public async Task AddAttendeeAsync(int eventId, Attendee attendee)
         {
             var events = await GetEventsAsync();
             var selectedEvent = events.FirstOrDefault(e => e.Id == eventId);

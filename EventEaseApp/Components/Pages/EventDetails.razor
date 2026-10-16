@@ -43,17 +43,14 @@ else
     [Parameter] 
     public int EventId { get; set; }
     private Event SelectedEvent;
-    private List<Registration> Attendees = new List<Registration>();
+    private List<Attendee> Attendees = new List<Attendee>();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // Fetch event by the routed ID
-        SelectedEvent = EventService.GetEventByIdAsync(EventId).Result;
+        // Fetch event details from EventService
+        SelectedEvent = await EventService.GetEventByIdAsync(EventId);
 
-                // Fetch event details from EventService
-       // SelectedEvent = await EventService.GetEventByIdAsync(Id);
-
-        // Get attendees from SessionState
+                // Get attendees from SessionState
         Attendees = SessionState.GetAttendeesForEvent(EventId);
 
     }

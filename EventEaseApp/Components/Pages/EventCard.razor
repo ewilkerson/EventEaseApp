@@ -3,9 +3,9 @@
 
 <div class="card shadow-sm mb-3">
     <div class="card-body">
-        <h5 class="card-title">@Event.Name</h5>
+        <h5 class="card-title"><strong>Name:</strong> @Event.Name</h5>
         <p class="card-text"><strong>Date:</strong> @Event.Date</p>
-        <p class="card-text">@Event.Description</p>
+        <p class="card-text"><strong>Description:</strong> @Event.Description</p>
 
         <!-- Two-Way Data Binding Example -->
         <div class="form-group mb-3">
@@ -14,18 +14,24 @@
             <small class="text-muted">You are bringing @PartySize people.</small>
         </div>
 
-        <button class="btn btn-primary" @onclick="GoToDetails">View Details</button>
+        <button class="btn btn-primary" @onclick="GoToDetails">View Details</button> 
     </div>
 </div>
 
 @code {
     [Parameter] public Event Event { get; set; }
-    [Inject] public NavigationManager NavManager { get; set; }
+    
+    // Add this parameter to accept the method from the parent
+    [Parameter] public EventCallback<int> OnViewDetails { get; set; } 
 
     public int PartySize { get; set; } = 1;
 
-    private void GoToDetails()
+    private async Task GoToDetails()
     {
-        NavManager.NavigateTo($"/events/{Event.Id}");
+        // Trigger the callback, passing the event ID to the parent
+        if (OnViewDetails.HasDelegate)
+        {
+            await OnViewDetails.InvokeAsync(Event.Id);
+        }
     }
 }

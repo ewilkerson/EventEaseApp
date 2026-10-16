@@ -4,40 +4,42 @@
 
 @inject EventService EventService
 @inject NavigationManager Navigation
+
 <PageTitle>Events</PageTitle>
-    <h1>Upcoming Events</h1>
 
-    @if (EventList == null)
-    {
-        <p>Loading events...</p>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var ev in EventList)
-            {
-                <div class="col-md-4">
-                    <h5 class="card-title">@ev.Name</h5>
-                <p class="card-text"><strong>Date:</strong> @ev.Date</p>
-                <p class="card-text">@ev.Description</p>
+<h1>Upcoming Events</h1>
 
-<EventCard Event="ev" OnViewDetails="NavigateToEvent" />
+@if (EventList == null)
+{
+    <p>Loading events...</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var ev in EventList)
+        {
+            <div class="col-md-4">
+             
+                @* Note: It is best practice to prefix C# variables with @ when passing them as parameters to components *@
+                <EventCard Event="@ev" OnViewDetails="NavigateToEvent" />
 
-                </div>
-            }
-        </div>
-    }
+            </div>
+        }
+    </div>
+}
 
 @code {
-    private List<Event> ?EventList;
+    private List<Event>? EventList;
 
     protected override async Task OnInitializedAsync()
     {
-        EventList = await EventService.GetEventsAsync(); // Fetch events from JSON file
+        // Fetch events from JSON file
+        EventList = await EventService.GetEventsAsync();
     }
 
     private void NavigateToEvent(int eventId)
     {
-        Navigation.NavigateTo($"/event/{eventId}"); // Redirect to event details
+        // Redirect to event details
+        Navigation.NavigateTo($"/event/{eventId}");
     }
 }
