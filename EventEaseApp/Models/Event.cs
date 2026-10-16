@@ -7,8 +7,8 @@
         public string Date { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
-        public List<Attendee> Attendees { get; set; } = new List<Attendee>();
-        public void AddAttendee(Attendee attendee)
+        public List<Registration> Attendees { get; set; } = new List<Registration>();
+        public void AddAttendee(Registration attendee)
         {
             if (!Attendees.Contains(attendee))
             {

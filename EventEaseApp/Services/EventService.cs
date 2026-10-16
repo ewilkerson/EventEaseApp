@@ -6,7 +6,7 @@ namespace EventEaseApp.Services
     public class EventService
     {
         private readonly HttpClient _httpClient;
-        private const string JsonFilePath = "sample-events.json";
+        private string JsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "sample-events.json");
 
         public EventService(HttpClient httpClient)
         {
@@ -30,8 +30,8 @@ namespace EventEaseApp.Services
 
         public async Task<List<Event>> GetEventsAsync()
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
-
+           // var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
+            var filePath = JsonFilePath;
             if (!File.Exists(filePath))
             {
                 return new List<Event>();
@@ -50,7 +50,7 @@ namespace EventEaseApp.Services
         }
 
         // Add an attendee to an event
-        public async Task AddAttendeeAsync(int eventId, Attendee attendee)
+        public async Task AddAttendeeAsync(int eventId, Registration attendee)
         {
             var events = await GetEventsAsync();
             var selectedEvent = events.FirstOrDefault(e => e.Id == eventId);
@@ -67,7 +67,8 @@ namespace EventEaseApp.Services
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             var json = JsonSerializer.Serialize(events, options);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
+          //  var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
+            var filePath = JsonFilePath;
             await File.WriteAllTextAsync(filePath, json);
         }
     }

@@ -1,4 +1,4 @@
-﻿@page "/RegistrationForm"
+﻿@page "/RegistrationForm/{EventId:int}"
 @using EventEaseApp.Models
 @using EventEaseApp.Services
 @inject SessionState SessionState
@@ -20,7 +20,7 @@
         <ValidationMessage For="@(() => registration.Email)" />
     </div>
 
-    <button type="submit" class="btn btn-success">Register for Event</button>
+    <NavLink class="btn btn-secondary" href="@($"/events/{EventId}")"   Match="NavLinkMatch.Prefix">Back to Events</NavLink>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-success">Register for Event</button>
 </EditForm>
 
 @if (isRegistered)

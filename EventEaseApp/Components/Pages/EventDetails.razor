@@ -39,7 +39,7 @@ else
                     <p>No attendees registered yet.</p>
                 }
 
-                <NavLink class="btn btn-secondary" href="@($"/events")"   Match="NavLinkMatch.Prefix">Back to Events</NavLink>
+                <NavLink class="btn btn-secondary" href="@($"/events")"   Match="NavLinkMatch.Prefix">Back to Events</NavLink>&nbsp;&nbsp;&nbsp;&nbsp;<NavLink class="btn btn-secondary" href="@($"/RegistrationForm/{SelectedEvent.Id}")"   Match="NavLinkMatch.Prefix">Register for Event</NavLink>
  <!--       
 <button class="btn btn-secondary mt-3" @onclick="NavigateBack">Back to Events</button>
 -->
@@ -51,7 +51,7 @@ else
     [Parameter] 
     public int EventId { get; set; }
     private Event SelectedEvent;
-    private List<Attendee> Attendees = new List<Attendee>();
+   private List<Registration> Attendees = new List<Registration>();
 
     protected override async Task OnInitializedAsync()
     {
