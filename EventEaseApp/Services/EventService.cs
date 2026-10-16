@@ -14,10 +14,33 @@ namespace EventEaseApp.Services
         }
 
         // Get all events
+        //public async Task<List<Event>> GetEventsAsync()
+        //{
+        //    try
+        //    {
+        //        return await _httpClient.GetFromJsonAsync<List<Event>>(JsonFilePath) ?? new List<Event>();
+        //    }
+        //    catch (HttpRequestException ex)
+        //    {
+        //        // Log or handle the error (e.g., file missing or BaseAddress not set)
+        //        Console.WriteLine($"Error fetching events: {ex.Message}");
+        //        return new List<Event>();
+        //    }
+        //}
+
         public async Task<List<Event>> GetEventsAsync()
         {
-            return await _httpClient.GetFromJsonAsync<List<Event>>(JsonFilePath) ?? new List<Event>();
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
+
+            if (!File.Exists(filePath))
+            {
+                return new List<Event>();
+            }
+
+            string jsonString = await File.ReadAllTextAsync(filePath);
+            return JsonSerializer.Deserialize<List<Event>>(jsonString) ?? new List<Event>();
         }
+
 
         // Get an event by ID
         public async Task<Event?> GetEventByIdAsync(int eventId)

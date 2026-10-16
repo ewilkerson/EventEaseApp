@@ -18,10 +18,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
 builder.Services.AddScoped<AttendanceStateService>();
-//builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<EventService>();
 builder.Services.AddScoped<SessionState>();
 
+// If EventService is the concrete class that takes HttpClient in its constructor:
+builder.Services.AddHttpClient<EventService>();
+
+//// Blazor WebAssembly (Program.cs)
+//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+//// Or for Blazor Server / ASP.NET Core:
+//builder.Services.AddHttpClient<EventService>(client =>
+//{
+//    client.BaseAddress = new Uri("https://localhost:7052"); // or use configuration
+//});
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
