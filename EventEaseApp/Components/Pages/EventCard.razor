@@ -13,8 +13,10 @@
             <input type="number" id="partySize" class="form-control" @bind="PartySize" @bind:event="oninput" />
             <small class="text-muted">You are bringing @PartySize people.</small>
         </div>
-
+        <NavLink class="btn btn-primary" href="@($"/events/{Event.Id}")"   Match="NavLinkMatch.Prefix">View Details</NavLink>
+        <!--
         <button class="btn btn-primary" @onclick="GoToDetails">View Details</button> 
+        -->
     </div>
 </div>
 

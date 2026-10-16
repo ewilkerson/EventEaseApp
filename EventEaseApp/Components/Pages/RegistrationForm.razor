@@ -1,9 +1,11 @@
-﻿@using EventEaseApp.Models
+﻿@page "/RegistrationForm"
+@using EventEaseApp.Models
 @using EventEaseApp.Services
 @inject SessionState SessionState
 @inject NavigationManager Navigation
 
 <EditForm Model="@registration" OnValidSubmit="HandleValidSubmit">
+    <h5>Register for Event</h5>
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" />
 
@@ -17,13 +19,6 @@
         <InputText @bind-Value="registration.Email" class="form-control" @bind-Value="Registration.Email" />
         <ValidationMessage For="@(() => registration.Email)" />
     </div>
-
-      <div class="mb-3">
-            <label for="eventId" class="form-label">Event ID</label>
-            <InputNumber id="eventId" class="form-control" @bind-Value="registration.EventId"  />
-            <ValidationMessage For="@(() => registration.EventId)" />
-        </div>
-
 
     <button type="submit" class="btn btn-success">Register for Event</button>
 </EditForm>

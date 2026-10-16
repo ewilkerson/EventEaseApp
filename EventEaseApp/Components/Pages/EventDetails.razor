@@ -14,13 +14,16 @@
 }
 else
 {
-    <div class="card">
-    <RegistrationForm EventId="@SelectedEvent.Id" />
-    <h4>@SelectedEvent.Name</h4>
-                    <p><strong>Date:</strong> @SelectedEvent.Date</p>
-                <p><strong>Location:</strong> @SelectedEvent.Location</p>
-                <p>@SelectedEvent.Description</p>
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+  <!--  <RegistrationForm EventId="@SelectedEvent.Id" /> --> 
+    
+          <h5 class="card-title"><strong>Name:</strong> @SelectedEvent.Name</h5>
+        <p class="card-text"><strong>Date:</strong> @SelectedEvent.Date</p>
+        <p><strong>Location:</strong> @SelectedEvent.Location</p>
+        <p class="card-text"><strong>Description:</strong> @SelectedEvent.Description</p>
 
+  
                 <h3 class="mt-4">Attendees</h3>
                 @if (Attendees.Any())
                 {
@@ -35,7 +38,12 @@ else
                 {
                     <p>No attendees registered yet.</p>
                 }
-        <button class="btn btn-secondary mt-3" @onclick="NavigateBack">Back to Events</button>
+
+                <NavLink class="btn btn-secondary" href="@($"/events")"   Match="NavLinkMatch.Prefix">Back to Events</NavLink>
+ <!--       
+<button class="btn btn-secondary mt-3" @onclick="NavigateBack">Back to Events</button>
+-->
+</div>
 </div>
 }
 
