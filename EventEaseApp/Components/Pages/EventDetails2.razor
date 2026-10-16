@@ -25,6 +25,6 @@ else
     protected override void OnInitialized()
     {
         // Fetch event by the routed ID
-        SelectedEvent = EventService.GetEventById(EventId);
+        SelectedEvent = EventService.GetEventByIdAsync(EventId).Result;
     }
 }

@@ -6,11 +6,22 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using Microsoft.AspNetCore.Components.Web;
+//using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using EventEaseApp;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<AttendanceStateService>();
+//builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<SessionState>();
+
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
@@ -39,9 +50,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-builder.Services.AddScoped<AttendanceStateService>();
-builder.Services.AddScoped<EventService>();
-builder.Services.AddScoped<SessionState>();
 
 
 var app = builder.Build();
@@ -69,6 +77,6 @@ app.MapRazorComponents<App>()
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
-app.Run();
+//app.Run();
+await app.RunAsync();
 
-//await builder.Build().RunAsync();
