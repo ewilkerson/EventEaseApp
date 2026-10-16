@@ -59,7 +59,7 @@ else
         SelectedEvent = await EventService.GetEventByIdAsync(EventId);
 
                 // Get attendees from SessionState
-        Attendees = SessionState.GetAttendeesForEvent(EventId);
+        Attendees = await SessionState.GetRegistrationsForEventAsync(EventId);
 
     }
 

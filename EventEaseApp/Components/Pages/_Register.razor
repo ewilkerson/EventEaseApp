@@ -43,7 +43,7 @@
     private void HandleValidSubmit()
     {
         // Register attendee in SessionState
-        SessionState.RegisterAttendee(Registration);
+      //  SessionState.RegisterAttendee(Registration);
 
         Console.WriteLine($"User registered: Name = {Registration.Name}, Email = {Registration.Email}, Event ID = {Registration.EventId}");
         Navigation.NavigateTo($"/event/{Registration.EventId}"); // Redirect to the event details page

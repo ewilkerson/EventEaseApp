@@ -13,7 +13,7 @@ namespace EventEaseApp.Models
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Event ID is required.")]
+     //   [Required(ErrorMessage = "Event ID is required.")]
         public int EventId { get; set; }
     }
 }

@@ -51,7 +51,7 @@
         SelectedEvent = await EventService.GetEventByIdAsync(Id);
 
         // Get attendees from SessionState
-        Attendees = SessionState.GetAttendeesForEvent(Id).Select(a => a.Name).ToList();
+      //  Attendees = SessionState.GetAttendeesForEvent(Id).Select(a => a.Name).ToList();
     }
 
     private void NavigateBack()

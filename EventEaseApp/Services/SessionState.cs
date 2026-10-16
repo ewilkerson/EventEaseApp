@@ -1,29 +1,46 @@
 ﻿using EventEaseApp.Models;
+using System.Text.Json;
 
 namespace EventEaseApp.Services
 {
     public class SessionState
     {
-        public List<Registration> Attendees { get; private set; } = new();
-        public event Action OnStateChange;
+        private string JsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "sample-attendees.json");
 
-        public void RegisterAttendee(Registration attendee)
+        public async Task<List<Registration>> GetRegistrationsForEventAsync(int eventId)
         {
-            Registration newAttendee = new Registration
+            // var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
+           // var filePath = JsonFilePath;
+            if (!File.Exists(JsonFilePath))
             {
-                Name = attendee.Name,
-                Email = attendee.Email,
-                Id = attendee.EventId
-            };
-            Attendees.Add(newAttendee);
-            NotifyStateChanged();
+                return new List<Registration>();
+            }
+
+            string jsonString = await File.ReadAllTextAsync(JsonFilePath);
+            return JsonSerializer.Deserialize<List<Registration>>(jsonString) ?? new List<Registration>();
         }
 
-        private void NotifyStateChanged() => OnStateChange?.Invoke();
-
-        public List<Registration> GetAttendeesForEvent(int eventId)
+        // Add an attendee to an event
+        public async Task AddAttendeeAsync(int eventId, Registration attendee)
         {
-            return Attendees.Where(a => a.Id == eventId).ToList();
+            List<Registration> registrations = await GetRegistrationsForEventAsync(eventId);
+           
+            if (registrations != null && attendee != null)
+            {
+                attendee.Id = registrations.Count == 0 ? 1 : registrations.Max(x => x.Id) + 1;
+                registrations.Add(attendee);
+                await SaveEventsAsync(registrations);
+            }
+        }
+
+        // Save updated events
+        private async Task SaveEventsAsync(List<Registration> registrations)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(registrations, options);
+            //  var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", JsonFilePath);
+           // var filePath = JsonFilePath;
+            await File.WriteAllTextAsync(JsonFilePath, json);
         }
 
     }

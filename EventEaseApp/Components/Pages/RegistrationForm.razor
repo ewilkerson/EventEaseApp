@@ -4,23 +4,25 @@
 @inject SessionState SessionState
 @inject NavigationManager Navigation
 
-<EditForm Model="@registration" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@registration" OnValidSubmit="HandleValidSubmit" FormName="RegistrationForm">
     <h5>Register for Event</h5>
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" />
 
     <div class="mb-3">
         <label>Name:</label>
-        <InputText @bind-Value="registration.Name" class="form-control" @bind-Value="Registration.Name" />
+        <InputText @bind-Value="registration.Name" class="form-control" />
         <ValidationMessage For="@(() => registration.Name)" />
     </div>
     <div class="mb-3">
         <label>Email:</label>
-        <InputText @bind-Value="registration.Email" class="form-control" @bind-Value="Registration.Email" />
+        <InputText @bind-Value="registration.Email" class="form-control" />
         <ValidationMessage For="@(() => registration.Email)" />
     </div>
 
-    <NavLink class="btn btn-secondary" href="@($"/events/{EventId}")"   Match="NavLinkMatch.Prefix">Back to Events</NavLink>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-success">Register for Event</button>
+    <NavLink class="btn btn-secondary" href="@($"/events/{EventId}")" Match="NavLinkMatch.Prefix">Back to Events</NavLink>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button type="submit" class="btn btn-success">Register for Event</button>
 </EditForm>
 
 @if (isRegistered)
@@ -30,6 +32,7 @@
 
 @code {
     [Parameter] public int EventId { get; set; }
+    
     private Registration registration = new();
     private bool isRegistered = false;
 
@@ -38,16 +41,20 @@
         registration.EventId = EventId;
     }
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-                // Register attendee in SessionState
-        SessionState.RegisterAttendee(registration);
+        // 1. Await the method directly instead of assigning 'void' to a Task variable.
+        // 2. Assuming AddAttendeeAsync is inside an injected service like SessionState:
+        await SessionState.AddAttendeeAsync(EventId, registration);
 
         Console.WriteLine($"User registered: Name = {registration.Name}, Email = {registration.Email}, Event ID = {registration.EventId}");
-        Navigation.NavigateTo($"/event/{registration.EventId}"); // Redirect to the event details page
-
-        SessionState.RegisterAttendee(registration);
+        
         isRegistered = true;
-        registration = new Registration { EventId = this.EventId }; // Reset form
+        
+        // 3. Moved the closing brace to a new line so it isn't commented out
+      //  registration = new Registration { EventId = this.EventId }; // Reset form
+        
+        Navigation.NavigateTo($"/event/{registration.EventId}"); // Redirect to the event details page
+        
     }
 }
