@@ -1,0 +1,26 @@
+﻿@using EventEaseApp.Models
+@using Microsoft.AspNetCore.Components
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title"> Event Id - @Event.Id
+            <hr> @Event.Name
+        </h5>
+        <p class="card-text"><strong>Date:</strong> @Event.Date</p>
+        <p class="card-text"><strong>Location:</strong> @Event.Location</p>
+        <button class="btn btn-primary" @onclick="NavigateToDetails">View Details</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Event Event { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnViewDetails { get; set; }
+
+    private void NavigateToDetails()
+    {
+        OnViewDetails.InvokeAsync(Event.Id);
+    }
+}

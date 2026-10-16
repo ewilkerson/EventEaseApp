@@ -1,0 +1,38 @@
+﻿@page "/events"
+@using EventEaseApp.Models
+@using EventEaseApp.Services
+
+@inject EventService EventService
+@inject NavigationManager Navigation
+<PageTitle>Events</PageTitle>
+    <h1>Upcoming Events</h1>
+
+    @if (EventList == null)
+    {
+        <p>Loading events...</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var ev in EventList)
+            {
+                <div class="col-md-4">
+                    <EventCard Event="ev" OnViewDetails="NavigateToEvent" />
+                </div>
+            }
+        </div>
+    }
+
+@code {
+    private List<Event> ?EventList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EventList = await EventService.GetEventsAsync(); // Fetch events from JSON file
+    }
+
+    private void NavigateToEvent(int eventId)
+    {
+        Navigation.NavigateTo($"/event/{eventId}"); // Redirect to event details
+    }
+}

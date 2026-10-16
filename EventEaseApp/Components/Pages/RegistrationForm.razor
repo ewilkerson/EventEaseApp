@@ -1,0 +1,42 @@
+﻿@using EventEaseApp.Models
+@using EventEaseApp.Services
+@inject AttendanceStateService AttendanceService
+
+<EditForm Model="@registration" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" />
+
+    <div class="mb-3">
+        <label>Name:</label>
+        <InputText @bind-Value="registration.Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Email:</label>
+        <InputText @bind-Value="registration.Email" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Register for Event</button>
+</EditForm>
+
+@if (isRegistered)
+{
+    <div class="alert alert-success mt-3">Successfully registered!</div>
+}
+
+@code {
+    [Parameter] public int EventId { get; set; }
+    private Registration registration = new();
+    private bool isRegistered = false;
+
+    protected override void OnInitialized()
+    {
+        registration.EventId = EventId;
+    }
+
+    private void HandleValidSubmit()
+    {
+        AttendanceService.RegisterAttendee(registration);
+        isRegistered = true;
+        registration = new Registration { EventId = this.EventId }; // Reset form
+    }
+}
